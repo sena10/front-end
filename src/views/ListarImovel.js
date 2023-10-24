@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, FlatList, Image, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+
 
 const PropertyList = () => {
   const [searchText, setSearchText] = useState('');
@@ -8,7 +11,7 @@ const PropertyList = () => {
   const handleSearch = (text) => {
     setSearchText(text);
   };
-
+  
   const fetchData = async () => {
     try {
       const response = await fetch('https://andersonsenafilho.pythonanywhere.com/api/imoveis/');
@@ -25,9 +28,14 @@ const PropertyList = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const navigation = useNavigation();
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity   style={styles.card}
+    onPress={() => {
+      navigation.navigate('LOGIN', { id: item.id });
+    }}>
+      
       <Image source={{ uri: item.foto }} style={styles.foto} />
       <View style={styles.cardBody}>
         <Text style={styles.preço}>{item.preço}</Text>
